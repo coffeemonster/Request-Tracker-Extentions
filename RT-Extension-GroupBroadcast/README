@@ -1,0 +1,21 @@
+RT::Extension::GroupBroadcast
+=============================
+
+Enables RT/Admin/GroupBroadcast.html to send group emails.
+
+## INSTALL ##
+
+    perl Makefile.PL
+    make
+    make install
+
+    # Enable this plugin in your RT_SiteConfig.pm with something like:
+    Set(@Plugins, (qw/RT::Extension::GroupBraodcast/) );
+
+
+## CHANGES ##
+
+v0.1.1
+
+* 2012-08-23: (alister) Mason template to send email to groups
+
