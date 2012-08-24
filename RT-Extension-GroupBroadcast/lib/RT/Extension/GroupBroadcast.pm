@@ -6,50 +6,40 @@ use warnings;
 
 =head1 NAME
 
-RT::Extension::GroupBroadcast - Broadcast Messages via Email to existing RT groups.
-
-=head1 VERSION
-
-Version 0.1.1
+RT::Extension::GroupBroadcast - send email to groups
 
 =cut
 
-our $VERSION = '0.1.1';
-
+our $VERSION = '0.1.2';
 
 =head1 SYNOPSIS
 
+Broadcast Messages via Email to existing RT groups.
 This RT extension enables the sending of bulk email to a predefined RT group.
 
     http://rt.example.com/Admin/GroupBroadcast.html
 
-=head1 AUTHOR
 
-Alister West, C<< <alister at alisterwest.com> >>
+=head1 INSTALL
 
-=head1 BUGS
+    perl Makefile.PL
+    make
+    make install
 
-Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RT-Extension-GroupBroadcast>.
-I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
+    # Enable this plugin in your RT_SiteConfig.pm:
+    Set(@Plugins, (qw/RT::Extension::GroupBraodcast/) );
 
 
 =head1 SUPPORT
 
-You can find documentation for this module with the perldoc command.
-
-    perldoc RT::Extension::GroupBroadcast
-
-=item * Search CPAN
-
+Please report any bugs at either:
 L<http://search.cpan.org/dist/RT-Extension-GroupBroadcast/>
-
-=back
-
+L<https://github.com/coffeemonster/rt-extension-groupbroadcast>
+    
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2012 Alister West.
+Copyright 2012 Alister West, C<< <alister at alisterwest.com> >>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
@@ -57,6 +47,19 @@ by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
 
+
+=head1 CHANGES
+
+0.1.2   2012-08-24
+    - Moved repo to github.
+    - Updated docs.
+    - Enable PodToReadme
+
+0.1.1   2012-08-23
+    - Mason template to send email to groups (alister).
+
 =cut
 
-1; # End of RT::Extension::GroupBroadcast
+
+1;
+__END__

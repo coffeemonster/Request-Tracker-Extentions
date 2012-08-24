@@ -1,5 +1,5 @@
 ---
-abstract: 'Broadcast Messages via Email to existing RT groups.'
+abstract: 'send email to groups'
 author:
   - 'Alister West, C<< <alister at alisterwest.com> >>'
 build_requires:
