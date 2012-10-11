@@ -10,14 +10,14 @@ RT::Extension::GroupBroadcast - send email to groups
 
 =cut
 
-our $VERSION = '0.1.2';
+our $VERSION = '0.1.3';
 
 =head1 SYNOPSIS
 
 Broadcast Messages via Email to existing RT groups.
 This RT extension enables the sending of bulk email to a predefined RT group.
 
-    http://rt.example.com/Admin/GroupBroadcast.html
+    https://rt.example.com/Admin/GroupBroadcast.html
 
 
 =head1 INSTALL
@@ -27,7 +27,7 @@ This RT extension enables the sending of bulk email to a predefined RT group.
     make install
 
     # Enable this plugin in your RT_SiteConfig.pm:
-    Set(@Plugins, (qw/RT::Extension::GroupBraodcast/) );
+    Set(@Plugins, (qw/RT::Extension::GroupBroadcast/) );
 
 
 =head1 SUPPORT
@@ -49,6 +49,9 @@ See http://dev.perl.org/licenses/ for more information.
 
 
 =head1 CHANGES
+
+0.1.3   2012-10-10
+    - Fixed typo in install instructions
 
 0.1.2   2012-08-24
     - Moved repo to github.
