@@ -16,7 +16,12 @@
         var $=jQuery;
         $('#broadcast-form').validate({
             errorClass: "required",
-            rules : { Group: "required", From: "required", Subject: "required", Message: "required" }
+            rules : {
+                Group: "required",
+                From: { required: true, email: true },
+                Subject: "required",
+                Message: "required"
+            }
         });
     });
 </script>

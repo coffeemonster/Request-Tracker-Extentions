@@ -50,6 +50,9 @@ See http://dev.perl.org/licenses/ for more information.
 
 =head1 CHANGES
 
+UNRELEASED
+    - Validate 'From' as email
+
 0.1.3   2012-10-10
     - Fixed typo in install instructions
 
