@@ -10,7 +10,7 @@ RT::Extension::GroupBroadcast - send email to groups
 
 =cut
 
-our $VERSION = '0.1.3';
+our $VERSION = '0.1.4';
 
 =head1 SYNOPSIS
 
@@ -50,8 +50,10 @@ See http://dev.perl.org/licenses/ for more information.
 
 =head1 CHANGES
 
-UNRELEASED
-    - Validate 'From' as email
+0.1.4   2013-10-29
+    - js.validate 'From' as email type
+    - Bugfix: Cc/Bcc address should be ',' seperated (not ';')
+    - test-send-email.pl, test-send-group.pl added to scripts
 
 0.1.3   2012-10-10
     - Fixed typo in install instructions

@@ -75,7 +75,9 @@
     </&>
 </div>
 <%INIT>
+    use Encode;
     use MIME::Entity;
+    use RT::Interface::Email;
 
     # /Admin/autohandler does this - but it never hurts to double check :)
     if (! $session{'CurrentUser'}->UserObj->HasRight( Right => 'ShowConfigTab', Object => $RT::System ) ) {
@@ -93,11 +95,11 @@
             $group_obj->LoadUserDefinedGroup( $Group );
             my @emails = $group_obj->MemberEmailAddresses;
 
-            my $to = join('; ', @emails);
+            my $To = join(', ', @emails);
             my $mime = MIME::Entity->build(
                 'From'        => Encode::encode_utf8($From),
                 'To'          => Encode::encode_utf8($From),
-                'CC'          => Encode::encode_utf8($to),
+                'Bcc'         => Encode::encode_utf8($To),
                 'Subject'     => Encode::encode_utf8($Subject),
                 'Data'        => Encode::encode_utf8($Message)
             );
