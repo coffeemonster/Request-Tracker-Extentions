@@ -10,7 +10,7 @@ RT::Extension::SavedSearchResults - saved-searches with short urls on and offlin
 
 =cut
 
-our $VERSION = '1.1';
+our $VERSION = '1.2-pre';
 
 =head1 SYNOPSIS
 
@@ -64,6 +64,7 @@ our $VERSION = '1.1';
 
 =head1 CHANGES
 
+    1.2 - 2013/05/24 - Support rt-v3.8, perl-5.8
     1.1 - 2013/05/23 - CPANified.
     1.0 - 2013/05/17 - Created; tested with RT v4.0.12
 
