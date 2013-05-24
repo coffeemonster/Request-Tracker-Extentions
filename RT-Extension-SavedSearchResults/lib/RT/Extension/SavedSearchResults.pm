@@ -14,8 +14,8 @@ our $VERSION = '1.1';
 
 =head1 SYNOPSIS
 
-    # id is taken from the last int of the id string. The following are equivilent.
-    http://myrt.com/Search/SavedSearchResults.tsv?SavedSearchId=123
+    # Equivilent urls
+    http://myrt.com/Search/SavedSearchResults.tsv?SavedSearchId=8
     http://myrt.com/Search/SavedSearchResults.tsv?SavedSearchId=RT::System-1-SavedSearch-8
  
     # Get output from saved-search and save to file.      
