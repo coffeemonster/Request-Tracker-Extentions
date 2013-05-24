@@ -20,7 +20,11 @@ our $VERSION = '1.2-pre';
  
     # Get output from saved-search and save to file.      
     RT$ ./local/plugins/RT-SavedSearchResults/bin/rt-saved-search-results.pl  8  yesterday.tsv
-    
+
+    # Dump yesterdays tickets from cron
+    # Create Saved-Search (1234): Created > '1 day ago' AND Created < 'today'
+    # 55 0 * * * $HOME/rt/sbin/rt-saved-search-results.pl  1234  $HOME/data/$(date -d '1 day ago' +'%Y-%m-%d').tsv &> /dev/null
+
     # Use RT built-in tool to view a SavedSearch (stored in Attributes table)
     RT$ ./sbin/rt-attributes-viewer  8
 
@@ -48,8 +52,6 @@ our $VERSION = '1.2-pre';
           (there don't like the long urls with the Format string provided by RT)
 
 =head1 SUPPORT
-
-    This module is designed to work with RT4 and above.
 
     Please report any bugs at either:
     L<http://search.cpan.org/dist/RT-Extension-SavedSearchResults/>
