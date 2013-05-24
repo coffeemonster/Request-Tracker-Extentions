@@ -68,8 +68,11 @@ my $search = get_savedsearch( $SS_ID );
 debug $search;
 
 # Build URL
-my $url = RT->Config->Get('WebBaseURL') . "/" . RT->Config->Get('WebPath');
+my $url = RT->Config->Get('WebBaseURL');
+my $webpath = RT->Config->Get('WebPath') || '';
 $url =~ s{/$}{};
+$webpath =~ s{^/|/$}{}g;
+$url .= "/$webpath" if $webpath;
 $url .= "/Search/SavedSearchResults.tsv?SavedSearchId=" . $SS_ID;
 info "Fetching: $url";
 
@@ -97,6 +100,7 @@ sub get_web_content {
 
     my $request = HTTP::Request->new( GET => $url );
     $request->header( "Cookie", $cookie );
+    $request->header( "Referer", RT->Config->Get('WebPath') );
 
     my $response = $ua->simple_request($request);
     if ($response->is_success) {
