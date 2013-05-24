@@ -8,11 +8,13 @@
 #
 BEGIN {
     use FindBin qw/$Bin/;
-    use lib "$Bin/../../../../local/lib", "$Bin/../../../../lib";
+    # support running from plugins or sbin
+    use lib "$Bin/../../../../local/lib", "$Bin/../../../../lib",
+            "$Bin/../local/lib", "$Bin/../lib";
 }
 use strict;
 use warnings;
-use feature qw/say/;
+sub say { print "$_\n" for @_; }
 
 use Data::Dumper; $Data::Dumper::Sortkeys++;
 use File::Basename qw/basename/;
@@ -21,6 +23,7 @@ use LWP::UserAgent;
 
 use RT;
 use RT::Interface::Web;
+use RT::Interface::Web::Session;
 use RT::Ticket;
 use RT::User;
 
@@ -128,11 +131,12 @@ sub create_valid_session {
     tie my %session, 'RT::Interface::Web::Session', undef;
     $session{'CurrentUser'} = $user_obj;
 
-    # SessionCookieName uses ENV{SERVER_PORT}
-    local $ENV{'SERVER_PORT'} = $RT_PORT;
+    # Duplicate functionality of RT::Interface::Web::_SessionCookieName() which was introduced in RT4.
+    my $cookiename = "RT_SID_" . RT->Config->Get('rtname');
+    $cookiename .= "." . $RT_PORT if $RT_PORT;
 
     my $cookie = CGI::Cookie->new(
-        -name     => RT::Interface::Web::_SessionCookieName(),
+        -name     => $cookiename,
         -value    => $session{_session_id},
         -path     => RT->Config->Get('WebPath'),
         -secure   => ( RT->Config->Get('WebSecureCookies') ? 1 : 0 ),
