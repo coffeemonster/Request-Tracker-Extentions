@@ -96,11 +96,11 @@ sub get_web_content {
     my ($url, $cookie) = @_;
 
     my $ua = LWP::UserAgent->new();
-    $ua->timeout(10);
+    $ua->timeout(60); # 1min
 
     my $request = HTTP::Request->new( GET => $url );
     $request->header( "Cookie", $cookie );
-    $request->header( "Referer", RT->Config->Get('WebPath') );
+    $request->header( "Referer", RT->Config->Get('WebBaseURL') );
 
     my $response = $ua->simple_request($request);
     if ($response->is_success) {
