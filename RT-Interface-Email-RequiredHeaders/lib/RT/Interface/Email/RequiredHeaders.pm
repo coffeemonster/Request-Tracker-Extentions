@@ -1,6 +1,6 @@
 package RT::Interface::Email::RequiredHeaders;
 
-our $VERSION = '1.0';
+our $VERSION = '1.1';
 
 =head1 NAME
 
@@ -72,38 +72,51 @@ sub GetCurrentUser {
     );
 
     # Default return values - if not triggering this plugin.
-    my @ret = ( $args{CurrentUser}, $args{AuthLevel});
+    my @ret = ( $args{CurrentUser}, $args{AuthLevel} );
 
     my %config = RT->Config->Get('Plugin_RequiredHeaders');
     my $required = $config{required};
+    my $queues   = defined $config{queues} ? $config{queues} : 1;
 
     $RT::Logger->debug("X-RT-RequestHeaders debugging ...");
-    $RT::Logger->debug(" .. Action: $args{Action}");
-    $RT::Logger->debug(" .. AuthLevel: $args{AuthLevel}");
-    $RT::Logger->debug(" .. CurrentUser: $args{CurrentUser}");
-    $RT::Logger->debug(" .. Config: " . Dumper \%config );
     
-    # If required isn't 
+    # Default required to empty which will pass-through
     $required = [] if (!$required || !ref $required || !@$required);
 
+    
+    # we only ever filter 'new' tickets.
+    if ($args{'Ticket'}->id) {
+        $RT::Logger->debug( " .. ticket correspondence - SKIP");
+        return @ret;
+    }
 
-    # TODO - enable on/off for queues
-    # my $queues   = $config{queues} || 1;
-    # unless ($queues == 1 || (ref $queues eq 'ARRAY' && @$queues)) {
-    #    $queues = 0;
-    # }
-    # Pass-through unless headed for a restricted queue
-    # return (@ret, "Passthrough - Queue not restricted") if ref $queues && @$queues == 0;
-    # return (@ret, "Passthrough - Queue not restricted") if $queues == 0;
+    # queues are empty or off
+    if ($queues == 0 || (ref $queues && !@$queues)) {
+        $RT::Logger->debug( " .. config.queues is off - SKIP");
+        return @ret;
+    }
+
+    # queues == 1 - apply all
+    # queues == ['general'] - only to general
+    if (ref $queues) {
+        my $dest = lc $args{Queue}->Name;
+        
+        # skip if destination queue is not mentionend in the config
+        if ( grep {!/$dest/i} @$queues ) {
+            $RT::Logger->debug( " .. queue[$dest] not found in config.queues - SKIP" );
+            return @ret;
+        }
+    }
 
 
-    # Pass-through correspondance - we are only concerned with 'new' tickets.
-    return @ret if $args{'Ticket'}->id;
-
+    # check message::headers to make sure all required headers are present
     my $head = $args{'Message'}->head;
     foreach my $header (@$required) {
+
+        # Missing a header
         if (! $head->get($header) ) {
 
+            # notify sender
             my $ErrorsTo = RT::Interface::Email::ParseErrorsToAddressFromHead( $head );
             RT::Interface::Email::MailError(
                 To          => $ErrorsTo,
@@ -112,12 +125,13 @@ sub GetCurrentUser {
                 MIMEObj     => $args{'Message'}
             );
 
-            $RT::Logger->info("ERROR - headers missing");
+            # halt further email processing to block creation of a ticket.
+            $RT::Logger->info("RequestHeaders: [error] email from $ErrorsTo with header missing ($header) - HALT");
             return ( $args{CurrentUser}, -2 );
         }
     }
 
-    $RT::Logger->debug(" .. Status: OK - all required headers present");
+    $RT::Logger->info("RequestHeaders: OK - all required headers present");
     return @ret;
 }
 
