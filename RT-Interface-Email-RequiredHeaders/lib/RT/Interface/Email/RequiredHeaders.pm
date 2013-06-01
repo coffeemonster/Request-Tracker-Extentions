@@ -13,23 +13,24 @@ our $VERSION = '1.1';
 
 =head1 INSTALL
 
-    # rt/etc/RT_SiteConfig.pm
+    # etc/RT_SiteConfig.pm
+    # Note: Must come before Filter::TakeAction in MailPlugins (if present)
 
-    # Make sure RT can load from its plugin dir.
-    Set(@Plugins, qw/ .. RT::Interface::Email::RequiredHeaders .. /);
-
-    # Add to incoming mail plugins list.
-    # - must come before Filter::TakeAction (if present)
-    Set(@MailPlugins, qw/ RequiredHeaders  Filter::TakeAction /);
-
-    # Setup config
-    #
+    Set(@Plugins,(qw/
+        RT::Interface::Email::RequiredHeaders
+    /));
+    Set(@MailPlugins, (qw/
+        Auth::MailFrom
+        RequiredHeaders
+    /));
     Set(%Plugin_RequiredHeaders, (
+        # required ------------------
         "required" => [qw/X-RT-MySite/],
-        # "queues"   => 1,                    # all queues
-        # "queues"   => [qw/General/],      # some queues
-        # "message" => "You do not have permissions to create a ticket",
-    )
+        # optional ------------------ 
+        "queues"   => [qw/General/],
+        "message"  => "Error: You can only submit tickets via the web-interface",
+    ));
+
 
 =head1 AUTHOR
 
@@ -46,7 +47,6 @@ our $VERSION = '1.1';
 
 use warnings;
 use strict;
-use Data::Dumper; $Data::Dumper::Sortkeys=1;
 
 use RT::Interface::Email qw(ParseCcAddressesFromHead);
 
