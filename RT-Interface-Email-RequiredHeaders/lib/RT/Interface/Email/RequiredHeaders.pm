@@ -1,15 +1,15 @@
 package RT::Interface::Email::RequiredHeaders;
 
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 
 =head1 NAME
 
-    RT::Interface::Email::RequiredHeaders - Only accept new tickets via email with a certain header.
+    RT::Interface::Email::RequiredHeaders - only accept new tickets via email with a certain header
 
 =head1 SYNOPSIS
 
-    Used in conjuntion with a web-form which sends emails back to RT.
-    Don't accept new emails to the Queue address.
+    Used to enforce ticket-creation from a web-interface.
+    Doesn't accept new emails to the support queue without a special header.
 
 =head1 INSTALL
 
@@ -24,38 +24,50 @@ our $VERSION = '1.1';
         RequiredHeaders
     /));
     Set(%Plugin_RequiredHeaders, (
-        # required ------------------
-        "required" => [qw/X-RT-MySite/],
-        # optional ------------------ 
-        "queues"   => [qw/General/],
-        "message"  => "Error: You can only submit tickets via the web-interface",
-    ));
+        "required"  => [qw/X-RT-RequiredHeader/], # required is always required
+        # "queues"  => [qw/General/],             # defaults to all queues
+        # # change default rejection message:
+        # "message" => "Error: You can only submit issues via the web.",
+   ));
 
 
 =head1 AUTHOR
 
-    Alister West C<< <alister@alisterwest.com> >>
+    Alister West - http://alisterwest.com/
 
 =head1 LICENCE AND COPYRIGHT
 
-    Copyright (c) 2013, Alister West
+    Copyright 2013, Alister West
 
     This module is free software; you can redistribute it and/or
-    modify it under the same terms as Perl itself. See L<perlartistic>.
+    modify it under the same terms as Perl. See http://dev.perl.org/licenses/.
+
+=head1 CHANGES
+
+=over
+
+=item  1.2 - 2013-06-03 - CPAN-ified
+
+=item  1.1 - 2013-06-03 - GitHub-ified
+
+=item  1.0 - 2013-05-30 - Initial working plugin
+
+=back
 
 =cut;
 
+use 5.008;
 use warnings;
 use strict;
 
 use RT::Interface::Email qw(ParseCcAddressesFromHead);
 
-=head2 GetCurrentUser
+=head1 GetCurrentUser - RT MailPlugin Callback
 
-    Returns a CurrentUser object.
+    Returns: ($CurrentUser, $auth_level) - not-triggered passthough inputs.
+    Returns: ($CurrentUser, -1 )         - halt further processing and send rejection notice.
 
-    MailPlugins provide this function as an interface.
-    return: (CurrentUser, $auth_level) - $auth_level of -1 or -2  will halt other mail plugins.
+    See RT::Interface::Email::GetAuthenticationLevel for more on $auth_level.
 
 =cut
 
@@ -79,11 +91,13 @@ sub GetCurrentUser {
     my $queues   = defined $config{queues} ? $config{queues} : 1;
 
     $RT::Logger->debug("X-RT-RequestHeaders debugging ...");
-    
-    # Default required to empty which will pass-through
-    $required = [] if (!$required || !ref $required || !@$required);
 
-    
+    # If required was not supplied - skip this plugin.
+    if (!$required || !ref $required || !@$required) {
+        $RT::Logger->debug( " .. no 'required' header was set - SKIP");
+        return @ret;
+    }
+
     # we only ever filter 'new' tickets.
     if ($args{'Ticket'}->id) {
         $RT::Logger->debug( " .. ticket correspondence - SKIP");
@@ -100,7 +114,7 @@ sub GetCurrentUser {
     # queues == ['general'] - only to general
     if (ref $queues) {
         my $dest = lc $args{Queue}->Name;
-        
+
         # skip if destination queue is not mentionend in the config
         if ( grep {!/$dest/i} @$queues ) {
             $RT::Logger->debug( " .. queue[$dest] not found in config.queues - SKIP" );
@@ -121,13 +135,13 @@ sub GetCurrentUser {
             RT::Interface::Email::MailError(
                 To          => $ErrorsTo,
                 Subject     => "Permission denied : " . $head->get('Subject'),
-                Explanation => ($config{message} || "No Permissions to create this ticket" ),
+                Explanation => ($config{message} || "Error: You can only submit issues via the web."),
                 MIMEObj     => $args{'Message'}
             );
 
             # halt further email processing to block creation of a ticket.
             $RT::Logger->info("RequestHeaders: [error] email from $ErrorsTo with header missing ($header) - HALT");
-            return ( $args{CurrentUser}, -2 );
+            return ( $args{CurrentUser}, -1 );
         }
     }
 
