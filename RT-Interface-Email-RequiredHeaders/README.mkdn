@@ -45,12 +45,6 @@
 1. 1 - 2013-06-03 - GitHub-ified
 1. 0 - 2013-05-30 - Initial working plugin
 
-use 5.008;
-use warnings;
-use strict;
-
-use RT::Interface::Email qw(ParseCcAddressesFromHead);
-
 # GetCurrentUser - RT MailPlugin Callback
 
     Returns: ($CurrentUser, $auth_level) - not-triggered passthough inputs.

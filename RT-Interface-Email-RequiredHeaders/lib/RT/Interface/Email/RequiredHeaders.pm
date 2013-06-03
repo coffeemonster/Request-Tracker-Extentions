@@ -54,7 +54,7 @@ our $VERSION = '1.2';
 
 =back
 
-=cut;
+=cut
 
 use 5.008;
 use warnings;
