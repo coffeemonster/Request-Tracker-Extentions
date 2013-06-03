@@ -1,6 +1,6 @@
 package RT::Interface::Email::TakeByMail;
 
-our $VERSION = '0.2';
+our $VERSION = '1.3';
 
 =head1 NAME
 
@@ -29,23 +29,22 @@ our $VERSION = '0.2';
 
 =head1 AUTHOR
 
-    Alister West C<< <alister@alisterwest.com> >>
+    Alister West - http://alisterwest.com/
 
 =head1 LICENCE AND COPYRIGHT
 
-    Copyright (c) 2013, Alister West
+    Copyright 2013, Alister West
 
-    This module is free software; you can redistribute it and/or
-    modify it under the same terms as Perl itself. See L<perlartistic>.
+    This module is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself. See http://dev.perl.org/licenses/.
 
-=cut;
+=cut
 
+use 5.008;
 use warnings;
 use strict;
-use Data::Dumper;
 
 use RT::Interface::Email qw(ParseCcAddressesFromHead);
-
 
 =head2 GetCurrentUser
 
@@ -68,7 +67,7 @@ sub GetCurrentUser {
         Queue         => undef,
         @_
     );
-    
+
     $RT::Logger->debug("TakeTicket");
 
     my @param = ( $args{'CurrentUser'}, $args{'AuthLevel'} );
@@ -88,15 +87,15 @@ sub GetCurrentUser {
     # Make sure we have a ticket to Take
     return @param unless $args{'Action'} =~ /^(?:comment|correspond)$/i;
     return @param unless $args{'Ticket'}->id;
-   
-    # Load Ticket 
+
+    # Load Ticket
     my $ticket = RT::Ticket->new( $args{'CurrentUser'} );
     $ticket->Load( $args{'Ticket'}->id );
     $RT::Logger->debug("TakeTicket [". $ticket->Id . "] Owner: ". $ticket->OwnerObj->Name);
 
     # Only take tickets belonging to Nobody so only the first response is actioned.
     return @param unless $ticket->OwnerObj->Name eq 'Nobody';
-   
+
     # Get the Ticket's queue - not the queue passed into mailgate.
     my $queue = RT::Queue->new( $args{'CurrentUser'} );
     $queue = $ticket->QueueObj;
