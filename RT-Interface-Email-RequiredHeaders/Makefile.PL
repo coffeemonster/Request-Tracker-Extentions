@@ -1,9 +1,10 @@
 use inc::Module::Install;
 
-name        'RT-Interface-Email-RequiredHeaders';
-all_from    'lib/RT/Interface/Email/RequiredHeaders.pm';
-readme_from 'lib/RT/Interface/Email/RequiredHeaders.pm';
-include     'Module::Install::RTx';
+name                 'RT-Interface-Email-RequiredHeaders';
+all_from             'lib/RT/Interface/Email/RequiredHeaders.pm';
+readme_from          'lib/RT/Interface/Email/RequiredHeaders.pm';
+readme_markdown_from 'lib/RT/Interface/Email/RequiredHeaders.pm';
+include              'Module::Install::RTx';
 
 # Allow build of a distribution without having an RT install
 RTx 'RT-Interface-Email-RequiredHeaders' unless $ENV{DIST_BUILD};
