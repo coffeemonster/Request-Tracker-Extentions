@@ -6,12 +6,13 @@ our $VERSION = '1.2';
 
     RT::Interface::Email::RequiredHeaders - only accept new tickets via email with a certain header
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
 
     Used to enforce ticket-creation from a web-interface.
     Doesn't accept new emails to the support queue without a special header.
 
-=head1 INSTALL
+=head1 SYNOPSIS
 
     # etc/RT_SiteConfig.pm
     # Note: Must come before Filter::TakeAction in MailPlugins (if present)
@@ -28,8 +29,18 @@ our $VERSION = '1.2';
         # "queues"  => [qw/General/],             # defaults to all queues
         # # change default rejection message:
         # "message" => "Error: You can only submit issues via the web.",
-   ));
+    ));
 
+=head1 INSTALL
+
+    perl Makefile.PL
+    make
+    make install
+
+    or clone directly into local/plugins directory
+
+    cd myrt/local/plugins
+    git clone git://github.com/coffeemonster/RT-Interface-Email-RequiredHeaders.git
 
 =head1 AUTHOR
 
