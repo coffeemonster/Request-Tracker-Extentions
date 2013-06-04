@@ -57,11 +57,11 @@ our $VERSION = '1.2';
 
 =over
 
-=item  1.2 - 2013-06-03 - CPAN-ified
+=item  * 1.2 - 2013-06-03 - CPAN-ified
 
-=item  1.1 - 2013-06-03 - GitHub-ified
+=item  * 1.1 - 2013-06-03 - GitHub-ified
 
-=item  1.0 - 2013-05-30 - Initial working plugin
+=item  * 1.0 - 2013-05-30 - Initial working plugin
 
 =back
 

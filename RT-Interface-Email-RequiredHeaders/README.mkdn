@@ -52,9 +52,9 @@
 
 # CHANGES
 
-1. 2 - 2013-06-03 - CPAN-ified
-1. 1 - 2013-06-03 - GitHub-ified
-1. 0 - 2013-05-30 - Initial working plugin
+- 1.2 - 2013-06-03 - CPAN-ified
+- 1.1 - 2013-06-03 - GitHub-ified
+- 1.0 - 2013-05-30 - Initial working plugin
 
 # GetCurrentUser - RT MailPlugin Callback
 
