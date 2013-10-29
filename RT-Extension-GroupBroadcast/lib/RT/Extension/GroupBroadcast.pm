@@ -54,6 +54,7 @@ See http://dev.perl.org/licenses/ for more information.
     - js.validate 'From' as email type
     - Bugfix: Cc/Bcc address should be ',' seperated (not ';')
     - test-send-email.pl, test-send-group.pl added to scripts
+    - added to Menu under Admin/Tools
 
 0.1.3   2012-10-10
     - Fixed typo in install instructions
