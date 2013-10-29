@@ -50,6 +50,9 @@ See http://dev.perl.org/licenses/ for more information.
 
 =head1 CHANGES
 
+next
+    - Only show menu-item to admin users.
+
 0.1.4   2013-10-29
     - js.validate 'From' as email type
     - Bugfix: Cc/Bcc address should be ',' seperated (not ';')

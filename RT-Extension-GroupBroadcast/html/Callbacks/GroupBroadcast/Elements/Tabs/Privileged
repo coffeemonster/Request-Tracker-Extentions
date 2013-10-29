@@ -1,11 +1,14 @@
-<%init>
-
-Menu()->child('tools')->child('config')->child('tools')->child( groupbroadcast =>
-    title => loc("Sent Group Broadcast Message"),
-    path  => "/Admin/GroupBroadcast.html",
-    description => 'Group Broadcast'
-);
-</%init>
-<%args>
+<%INIT>
+   if ( $session{'CurrentUser'}->HasRight( Right => 'ShowConfigTab', Object => RT->System ) ) {
+        my $tools = Menu()->child('tools');
+        $tools->child(
+            'groupbroadcast',
+            title       => 'Group Broadcast',
+            path        => '/Admin/GroupBroadcast.html',
+            description => 'Broadcast a message to a group',
+        );
+    }
+</%INIT>
+<%ARGS>
     $Actions => undef
-</%args>
+</%ARGS>
