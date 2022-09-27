@@ -1,0 +1,12 @@
+# Ignore everything we automatically build
+/blib/
+/inc/
+Makefile
+META.yml
+MYMETA.*
+pm_to_blib
+README
+*.tar.gz
+*.old
+*.swp
+*.bak
