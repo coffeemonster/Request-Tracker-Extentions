@@ -1,0 +1,14 @@
+<%INIT>
+   if ( $session{'CurrentUser'}->HasRight( Right => 'ShowConfigTab', Object => RT->System ) ) {
+        my $tools = Menu()->child('tools');
+        $tools->child(
+            'groupbroadcast',
+            title       => 'Group Broadcast',
+            path        => '/Admin/GroupBroadcast.html',
+            description => 'Broadcast a message to a group',
+        );
+    }
+</%INIT>
+<%ARGS>
+    $Actions => undef
+</%ARGS>
